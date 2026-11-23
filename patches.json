@@ -1,0 +1,12 @@
+{
+  "game": "2.209",
+  "patches": [
+    {
+      "id": "noclip",
+      "name": "Noclip",
+      "desc": "No morir al chocar",
+      "arm64": [ { "offset": "", "on": "C0035FD6" } ],
+      "arm32": [ { "offset": "", "on": "7047" } ]
+    }
+  ]
+}
