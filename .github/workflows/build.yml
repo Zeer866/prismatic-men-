@@ -1,0 +1,40 @@
+name: Build mod
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Compilar mod
+        run: |
+          ID=$(jq -r .id mod.json)
+          BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
+          AJ=$ANDROID_HOME/platforms/$(ls $ANDROID_HOME/platforms | sort -V | tail -1)/android.jar
+          mkdir -p out/api out/classes
+          javac -source 8 -target 8 -Xlint:-options -cp $AJ -d out/api $(find api -name '*.java')
+          javac -source 8 -target 8 -Xlint:-options -cp $AJ:out/api -d out/classes $(find src -name '*.java')
+          $BT/d8 --release --min-api 21 --lib $AJ --classpath out/api --output out $(find out/classes -name '*.class')
+          mv out/classes.dex out/$ID.dex
+          cp mod.json out/$ID.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mod
+          path: |
+            out/*.dex
+            out/*.json
+      - name: Publicar release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            out/*.dex
+            out/*.json
