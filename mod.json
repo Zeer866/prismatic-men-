@@ -1,0 +1,10 @@
+{
+  "id": "prismatic",
+  "name": "Prismatic Menu",
+  "version": "1.0",
+  "author": "Zeer",
+  "description": "Menu de herramientas: parches, FPS, backup y mas",
+  "type": "dex",
+  "main": "com.zeer.prismatic.PrismaticMod",
+  "url": "https://github.com/Zeer866/prismatic-men-/releases/download/v1.0/prismatic.dex"
+}
